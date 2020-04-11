@@ -53,7 +53,7 @@ const createTaskEditTemplate = (task) => {
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
-  const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
+  const isRepeatingTask = Object.values(repeatingDays).some((it) => it);
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
@@ -100,7 +100,17 @@ const createTaskEditTemplate = (task) => {
                       />
                     </label>
                   </fieldset>`
-      : ``
+      : `<fieldset class="card__date-deadline" disabled>
+                    <label class="card__input-deadline-wrap">
+                      <input
+                        class="card__date"
+                        type="text"
+                        placeholder=""
+                        name="date"
+                        value="${date} ${time}"
+                      />
+                    </label>
+                  </fieldset>`
     }
 
               <button class="card__repeat-toggle" type="button">
@@ -114,7 +124,11 @@ const createTaskEditTemplate = (task) => {
                       ${repeatingDaysMarkup}
                     </div>
                   </fieldset>`
-      : ``
+      : `<fieldset class="card__repeat-days" disabled>
+                    <div class="card__repeat-days-inner">
+                      ${repeatingDaysMarkup}
+                    </div>
+                  </fieldset>`
     }
             </div>
           </div>

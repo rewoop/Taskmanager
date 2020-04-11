@@ -11,15 +11,17 @@ const TASK_COUNT = 22;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
+let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-const filters = generateFilters();
 const tasks = generateTasks(TASK_COUNT);
+const filters = generateFilters(tasks);
+
+const render = (container, template, place = `beforeend`) => {
+  container.insertAdjacentHTML(place, template);
+};
 
 render(siteHeaderElement, createSiteMenuTemplate());
 render(siteMainElement, createFilterTemplate(filters));
@@ -30,10 +32,7 @@ const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 
 render(taskListElement, createTaskEditTemplate(tasks[0]));
 
-let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-
-tasks.slice(1, showingTasksCount)
-  .forEach((task) => render(taskListElement, createTaskTemplate(task)));
+tasks.slice(1, showingTasksCount).map((it) => render(taskListElement, createTaskTemplate(it))).join(`/n`);
 
 render(boardElement, createLoadMoreButtonTemplate());
 

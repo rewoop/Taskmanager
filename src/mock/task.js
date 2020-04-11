@@ -1,26 +1,42 @@
 import {COLORS} from "../const.js";
 
-const DescriptionItems = [
+const LAST_DAY_IN_WEEK = 8;
+const HALF_OF_RANDOM = 0.5;
+
+const DESCRIPTION_ITEMS = [
   `Изучить теорию`,
   `Сделать домашку`,
   `Пройти интенсив на соточку`,
 ];
 
-const DefaultRepeatingDays = {
-  "mo": false,
-  "tu": false,
-  "we": false,
-  "th": false,
-  "fr": false,
-  "sa": false,
-  "su": false,
+const WeekDay = {
+  MO: `mo`,
+  TU: `tu`,
+  WE: `we`,
+  TH: `th`,
+  FR: `fr`,
+  SA: `sa`,
+  SU: `su`
 };
 
+// const WEEK_DAYS = [[WeekDay.MO], [WeekDay.TU], [WeekDay.WE], [WeekDay.TH], [WeekDay.FR], [WeekDay.SA], [WeekDay.SU]];
 
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
+const DEFAULT_REPEATING_DAYS = Object.freeze({
+  [WeekDay.MO]: false,
+  [WeekDay.TU]: false,
+  [WeekDay.WE]: false,
+  [WeekDay.TH]: false,
+  [WeekDay.FR]: false,
+  [WeekDay.SA]: false,
+  [WeekDay.SU]: false,
+});
 
-  return array[randomIndex];
+const getBoolean = () => Math.random() > HALF_OF_RANDOM;
+
+const getRandomItem = (items) => {
+  const randomIndex = getRandomIntegerNumber(0, items.length);
+
+  return items[randomIndex];
 };
 
 const getRandomIntegerNumber = (min, max) => {
@@ -29,8 +45,8 @@ const getRandomIntegerNumber = (min, max) => {
 
 const getRandomDate = () => {
   const targetDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 8);
+  const sign = getBoolean() ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, LAST_DAY_IN_WEEK);
 
   targetDate.setDate(targetDate.getDate() + diffValue);
 
@@ -38,21 +54,21 @@ const getRandomDate = () => {
 };
 
 const generateRepeatingDays = () => {
-  return Object.assign({}, DefaultRepeatingDays, {
-    "mo": Math.random() > 0.5,
+  return Object.assign({}, DEFAULT_REPEATING_DAYS, {
+    [WeekDay.MO]: getBoolean(),
   });
 };
 
 const generateTask = () => {
-  const dueDate = Math.random() > 0.5 ? null : getRandomDate();
+  const dueDate = getBoolean() ? null : getRandomDate();
 
   return {
-    description: getRandomArrayItem(DescriptionItems),
+    description: getRandomItem(DESCRIPTION_ITEMS),
     dueDate,
-    repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
-    color: getRandomArrayItem(COLORS),
-    isArchive: Math.random() > 0.5,
-    isFavorite: Math.random() > 0.5,
+    repeatingDays: dueDate ? DEFAULT_REPEATING_DAYS : generateRepeatingDays(),
+    color: getRandomItem(COLORS),
+    isArchive: getBoolean(),
+    isFavorite: getBoolean(),
   };
 };
 
@@ -62,5 +78,4 @@ const generateTasks = (count) => {
     .map(generateTask);
 };
 
-
-export {generateTask, generateTasks};
+export {generateTasks};
