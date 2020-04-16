@@ -2,6 +2,8 @@ const FILTER_NAMES = [
   `all`, `overdue`, `today`, `favorites`, `repeating`, `archive`
 ];
 
+const SHOWING_DATE = 10;
+
 const filters = {
   all: 0,
   overdue: 0,
@@ -11,22 +13,24 @@ const filters = {
   archive: 0
 };
 
+const filterCopy = Object.assign({}, filters);
+
 const getCurrentFilterCount = (tasks) => {
-  filters.all = tasks.length;
+  filterCopy.all = tasks.length;
   tasks.forEach((task) => {
     if (task.isArchive) {
-      filters.archive++;
-      filters.all--;
+      filterCopy.archive++;
+      filterCopy.all--;
     }
     if (task.isFavorite) {
-      filters.favorites++;
+      filterCopy.favorites++;
     }
     if (task.dueDate < Date.now() && task.dueDate !== null) {
-      filters.overdue++;
+      filterCopy.overdue++;
     } else if (task.dueDate === null) {
-      filters.repeating++;
-    } else if (task.dueDate.setHours(0, 0, 0, 0) === new Date(Date.now()).setHours(0, 0, 0, 0) && task.dueDate !== null) {
-      filters.today++;
+      filterCopy.repeating++;
+    } else if (task.dueDate.toISOString().slice(0, SHOWING_DATE) === new Date(Date.now()).toISOString().slice(0, SHOWING_DATE) && task.dueDate !== null) {
+      filterCopy.today++;
     }
   });
 };
@@ -36,7 +40,7 @@ const generateFilters = (tasks) => {
   return FILTER_NAMES.map((it) => {
     return {
       title: it,
-      count: filters[it]
+      count: filterCopy[it]
     };
   });
 };
