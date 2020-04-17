@@ -1,36 +1,23 @@
-const FILTER_NAMES = [
-  `all`, `overdue`, `today`, `favorites`, `repeating`, `archive`
-];
+import {FILTER_NAMES, START_SHOWING_DATE, END_SHOWING_DATE, filters} from "../const";
 
-const SHOWING_DATE = 10;
-
-const filters = {
-  all: 0,
-  overdue: 0,
-  today: 0,
-  favorites: 0,
-  repeating: 0,
-  archive: 0
-};
-
-const filterCopy = Object.assign({}, filters);
+const filtersCopy = Object.assign({}, filters);
 
 const getCurrentFilterCount = (tasks) => {
-  filterCopy.all = tasks.length;
+  filtersCopy.all = tasks.length;
   tasks.forEach((task) => {
     if (task.isArchive) {
-      filterCopy.archive++;
-      filterCopy.all--;
+      filtersCopy.archive++;
+      filtersCopy.all--;
     }
     if (task.isFavorite) {
-      filterCopy.favorites++;
+      filtersCopy.favorites++;
     }
     if (task.dueDate < Date.now() && task.dueDate !== null) {
-      filterCopy.overdue++;
+      filtersCopy.overdue++;
     } else if (task.dueDate === null) {
-      filterCopy.repeating++;
-    } else if (task.dueDate.toISOString().slice(0, SHOWING_DATE) === new Date(Date.now()).toISOString().slice(0, SHOWING_DATE) && task.dueDate !== null) {
-      filterCopy.today++;
+      filtersCopy.repeating++;
+    } else if (task.dueDate.toDateString().slice(START_SHOWING_DATE, END_SHOWING_DATE) === new Date(Date.now()).toDateString().slice(START_SHOWING_DATE, END_SHOWING_DATE) && task.dueDate !== null) {
+      filtersCopy.today++;
     }
   });
 };
@@ -40,7 +27,7 @@ const generateFilters = (tasks) => {
   return FILTER_NAMES.map((it) => {
     return {
       title: it,
-      count: filterCopy[it]
+      count: filtersCopy[it]
     };
   });
 };
