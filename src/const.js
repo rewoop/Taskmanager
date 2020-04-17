@@ -1,6 +1,3 @@
-const START_SHOWING_DATE = 8;
-const END_SHOWING_DATE = 10;
-
 const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
 const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
@@ -33,4 +30,4 @@ const filters = {
   archive: 0
 };
 
-export {COLORS, DAYS, MONTH_NAMES, FILTER_NAMES, START_SHOWING_DATE, END_SHOWING_DATE, filters};
+export {COLORS, DAYS, MONTH_NAMES, FILTER_NAMES, filters};
