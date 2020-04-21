@@ -1,4 +1,4 @@
-import {FILTER_NAMES, START_SHOWING_DATE, END_SHOWING_DATE, filters} from "../const";
+import {FILTER_NAMES, filters} from "../const";
 
 const filtersCopy = Object.assign({}, filters);
 
@@ -16,7 +16,7 @@ const getCurrentFilterCount = (tasks) => {
       filtersCopy.overdue++;
     } else if (task.dueDate === null) {
       filtersCopy.repeating++;
-    } else if (task.dueDate.toDateString().slice(START_SHOWING_DATE, END_SHOWING_DATE) === new Date(Date.now()).toDateString().slice(START_SHOWING_DATE, END_SHOWING_DATE) && task.dueDate !== null) {
+    } else if (task.dueDate.toDateString() === new Date(Date.now()).toDateString() && task.dueDate !== null) {
       filtersCopy.today++;
     }
   });
