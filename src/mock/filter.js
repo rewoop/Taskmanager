@@ -16,7 +16,7 @@ const getCurrentFilterCount = (tasks) => {
       filtersCopy.overdue++;
     } else if (task.dueDate === null) {
       filtersCopy.repeating++;
-    } else if (task.dueDate.toDateString() === new Date(Date.now()).toDateString() && task.dueDate !== null) {
+    } else if (task.dueDate.toDateString() === new Date(Date.now()).toDateString()) {
       filtersCopy.today++;
     }
   });
